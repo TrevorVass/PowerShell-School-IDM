@@ -1,0 +1,28 @@
+EmployeeID,FirstName,LastName,JobTitle,Department,Office,Phone,ManagerID
+1,James,Kirk,Superintendent,Administration,District Office,1-555-555-0001,
+2,Spock,,Assistant Superintendent,Administration,District Office,1-555-555-0005,1
+3,Jean-Luc,Picard,Principal,Administration,Archer Elementary,1-555-555-0002,2
+4,Katherine,Janeway,Principal,Administration,Erikson Middle,1-555-555-0003,2
+5,Benjamin,Cisco,Principal,Administration,Cochran High,1-555-555-0004,2
+6,Nyota,Uhura,Executive Assistant,Administration,District Office,1-555-555-0006,1
+7,Montgomery,Scott,Director of Technology,IT,District Office,1-555-555-0007,1
+8,Miles,O'Brien,Systems Engineer,IT,District Office,1-555-555-0008,7
+9,Charles,Tucker,Network Engineer,IT,District Office,1-555-555-0009,7
+10,Reginald,Barclay,Developer,IT,District Office,1-555-555-0010,7
+11,Geordi,La Forge,Lead Technician,IT,District Office,1-555-555-0014,7
+12,Sonya,Gomez,Technician,IT,Archer Elementary,1-555-555-0011,11
+13,Robin,Lefler,Technician,IT,Erikson Middle,1-555-555-0012,11
+14,Michael,Rostov,Technician,IT,Cochran High,1-555-555-0013,11
+15,William,Riker,Teacher - 9th Grade,Education,Cochran High,1-555-555-015,5
+16,Beverly,Crusher,Teacher - 10th Grade,Education,Cochran High,1-555-555-0016,5
+17,Kira,Nerys,Teacher - 11th Grade,Education,Cochran High,1-555-555-0017,5
+18,Deanna,Troi,Teacher - 12th Grade,Education,Cochran High,1-555-555-0018,5
+19,Jadzia,Dax,Teacher - 8th Grade,Education,Erikson Middle,1-555-555-0019,4
+20,Katherine,Pulaski,Teacher - 7th Grade,Education,Erikson Middle,1-555-555-0020,4
+21,Tuvok,,Teacher - 6th Grade,Education,Erikson Middle,1-555-555-0021,4
+22,Michael,Burhham,Teacher - 5th Grade,Education,Archer Elementary,1-555-555-0022,3
+23,Pavel,Chekov,Teacher - 4th Grade,Education,Archer Elementary,1-555-555-0023,3
+24,Leonard,McCoy,Teacher - 3rd Grade,Education,Archer Elementary,1-555-555-0024,3
+25,Saru,,Teacher - 2nd Grade,Education,Archer Elementary,1-555-555-0025,3
+26,Keiko,O'Brien,Teacher - 1st Grade,Education,Archer Elementary,1-555-555-0026,3
+27,Wilber,Riker,Assistant Principal,Education,Cochran High,1-555-555-027,5

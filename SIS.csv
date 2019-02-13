@@ -1,0 +1,21 @@
+StudentID,FirstName,LastName,School,GradeLevel,TeacherID
+1,Sylvia,Tilly,Archer Elementary,5,22
+2,Wesley,Crusher,Cochran High,12,18
+3,Nog,,Erikson Middle,7,20
+4,James,MacAllister,Cochran High,9,15
+5,Dorian,Collins,Erikson Middle,6,21
+6,Riley,Shepard,Erikson Middle,6,21
+7,Karen,Farris,Erikson Middle,7,20
+8,Tim,Watters,Erikson Middle,8,19
+9,Sito,Jaxa,Cochran High,11,17
+10,Adam,Martoni,Cochran High,12,18
+11,Nicholas,Locarno,Cochran High,11,17
+12,Joshua,Albert,Cochran High,9,15
+13,Mordock,,Cochran High,10,16
+14,,Foster,Archer Elementary,4,23
+15,Irina,Galliulin,Archer Elementary,1,26
+16,Peter,Preston,Archer Elementary,2,25
+17,R,Merrick,Archer Elementary,5,22
+18,,Finnegan,Archer Elementary,4,23
+19,Valeris,,Archer Elementary,3,24
+20,Nicholas,Guest,Archer Elementary,3,24
