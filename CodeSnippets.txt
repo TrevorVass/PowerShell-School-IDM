@@ -1,0 +1,205 @@
+PowerShell Docs.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/?view=win10-ps
+
+
+PowerShell commandlet naming = verb-noun
+https://docs.microsoft.com/en-us/powershell/developer/cmdlet/approved-verbs-for-windows-powershell-commands
+
+How to check which commands are available for Active Directory management:
+Get-Command -module ActiveDirectory
+
+User Management
+
+Get-ADUser
+Gets one or more Active Directory users.
+ https://docs.microsoft.com/en-us/powershell/module/addsadministration/Get-ADUser?view=win10-ps
+
+	Get the user with the SAM Account Name iasimov, with the default property set.
+	Get-ADUser -Filter { SAMAccountName -eq "iasimov" }
+	
+	Same as above but using the Identity parameter (explicitly telling it which account to use). Works for DNs, GUIDs, SIDs, and SAMAccountNames.
+	Get-ADUser iasimov
+	
+	Same as above but with all properties.
+	Get-ADUser -Filter { SAMAccountName -eq "iasimov" } -Properties *
+	
+	Same as above but just display the user's GUID.
+	Get-ADUser -Filter { SAMAccountName -eq "iasimov" } | Format-List -Property ObjectGUID
+
+New-ADUser
+Creates an Active Directory user.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/new-aduser?view=win10-ps
+
+	A couple of ways to create a SecureString to pass as the account password when creating it.
+	$password = ConvertTo-SecureString "BlackH0les!" -AsPlainText -Force
+	$password = Read-Host -AsSecureString
+	
+	Create a new user with some initial properties .
+	New-ADUser -Name "Stephen Hawking" -DisplayName "Stephen Hawking" -GivenName "Stephen" -Surname "Hawking" -SAMAccountName "shawking" -UserPrincipalName "shawking@scoe.info" -EmployeeID "2" -Title "Astrophysicist" -EmailAddress "shawking@scoe.info" -Department "Physics" -Company "Cambridge University" -Description "Famous Modern Astrophysicist" -AccountPassword $password -ChangePasswordAtLogon $true -Enabled $true
+	
+	Create a new user based upon an existing account or template account.
+	$template = Get-ADUser -Filter { SAMAccountName -eq "astronaut-template" } -Properties City,Company,Country,Department,Description,HomePage,MemberOf,Office,OfficePhone,PostalCode,State,StreetAddress,Title
+	$newUser = New-ADUser -Name "John Glenn" -DisplayName "John Glenn" -GivenName "John" -Surname "Glenn" -SAMAccountName "jglenn" -UserPrincipalName "jglenn@scoe.info" -EmployeeID "3" -EmailAddress "jglenn@scoe.info" -AccountPassword $password -ChangePasswordAtLogon $true -Enabled $true -Instance $template -PassThru
+	
+	$groups = Get-ADPrincipalGroupMembership -id $template
+	Add-ADPrincipalGroupMembership -Identity $newUser -MemberOf $groups
+	Note: Throws a warning about Domain Users, but adds the rest without error.
+	
+Set-ADUser
+Modifies an Active Directory user.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/set-aduser?view=win10-ps
+
+	Modify an account.
+	Set-ADUser jglenn  -City "Washington" -Company "United States" -Department "Senate" -Description "Senator" -HomePage "https://en.wikipedia.org/wiki/John_Glenn" -Office "Hart Senate Office Building" -OfficePhone "+1 (202) 224-3353" -PostalCode "20510" -State "District of Columbia" -StreetAddress "503 Hart Senate Office Building" -Title "Senator"
+
+Remove-ADUser
+Removes an Active Directory user.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/remove-aduser?view=win10-ps
+
+	Remove an account.
+	Remove-ADUser jglenn
+
+Unlock-ADAccount
+Unlocks an Active Directory account.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/unlock-adaccount?view=win10-ps
+
+	Unlock an account that is locked due to bad password attempts.
+	Unlock-ADAccount shawking
+	
+Disable-ADAccount
+Disables an Active Directory account.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/disable-adaccount?view=win10-ps
+
+	Disable an account. (Can also use a filter for bulk disables.)
+	Disable-ADAccount shawking
+
+Enable-ADAccount
+Enables an Active Directory account.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/enable-adaccount?view=win10-ps
+
+	Disable an account. (Can also use a filter for bulk enables.)
+	Enable-ADAccount shawking
+
+Set-ADAccountPasswordModifies the password of an Active Directory account.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/set-adaccountpassword?view=win10-ps
+
+	Create a SecureString for the passwords.
+	$oldPassword = ConvertTo-SecureString "BlackH0les!" -AsPlainText -Force
+	$newPassword = ConvertTo-SecureString "@BriefHist0ryOfT!me" -AsPlainText -Force
+	
+	Change an account's password if you know the old one.
+	Set-ADAccountPassword shawking -OldPassword $oldPassword -NewPassword $newPassword
+	
+	Reset an account's password if know don't know the old one.
+	Set-ADAccountPassword shawking -NewPassword $newPassword -Reset
+	
+Search-ADAccount
+Gets Active Directory user, computer, or service accounts that meet supplied critera.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/search-adaccount?view=win10-ps
+
+	Search for users, computers, and service accounts whose account has been disabled.
+	Search-ADAccount -AccountDisabled
+	
+	Same as above but users only.
+	Search-ADAccount -AccountDisabled -UsersOnly
+	
+	Search for users whose account has expired.
+	Search-ADAccount -AccountExpired -UsersOnly
+	
+	Search for users whose account will expire in the next week.
+	Search-ADAccount -AccountExpiring -UsersOnly -TimeSpan 7.00:00:00
+
+	Search for users whose accounts have expired passwords.
+	Search-ADAccount -PasswordExpired -UsersOnly
+	
+	Search for users whose accounts are locked out because of bad password attempts.
+	Search-ADAccount -LockedOut -UsersOnly
+	
+Group Management
+
+Get-ADGroup
+Gets one or more Active Directory groups.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/get-adgroup?view=win10-ps
+
+	Get the group with the SAM Account Name astonauts, with the default property set.
+	Get-ADGroup -Filter { SAMAccountName -eq "astronauts" }
+	
+	Same as above but using the Identity parameter (explicitly telling it which group to use). Works for DNs, GUIDs, SIDs, and SAMAccountNames.
+	Get-ADGroup astronauts
+	
+	Same as above but with all properties.
+	Get-ADGroup -Filter { SAMAccountName -eq "astronauts" } -Properties *
+	
+	Same as above but just display the group's GUID.
+	Get-ADGroup -Filter { SAMAccountName -eq "astronauts" } | Format-List -Property ObjectGUID
+	
+New-ADGroup
+Creates an Active Directory group.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/new-adgroup?view=win10-ps
+
+	Create a new security group at the default path (the Users OU in AD) with some initial parameters.
+	New-ADGroup -Name "Astrophysicists" -DisplayName "Astrophysicists" -SamAccountName "astrophysicists" -GroupScope Global -GroupCategory Security -Description "Physicists that are interested in the life of stars, planets, and galaxies in the universe."
+	
+	Similar to above, but with the group created at a specific path in AD and a manager assigned.
+	New-ADGroup -Name "Aerospace Engineers" -DisplayName "Aerospace Engineers" -SamAccountName "aerospace-engineers" -GroupScope Global -GroupCategory Security -Description "Yep. We're rocket scientists." -Path "OU=NASA,DC=scoe,DC=info" -ManagedBy "jbrindenstine"
+	
+	Also possible to create groups via a template with the -Instance parameter. Might be useful if you set a lot of properties to the same values for your groups.
+
+Set-ADGroup
+Modifies an Active Directory group.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/set-adgroup?view=win10-ps
+
+	Modify a group with properties not handled explicitly by commandlet parameters.
+	Set-ADGroup astrophysicists -ManagedBy shawking -HomePage "https://www.astro.phy.cam.ac.uk/" -Replace @{info="What happens in a black hole. Stays in a black hole."}
+
+Remove-ADGroup
+Removes an Active Directory group.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/remove-adgroup?view=win10-ps
+
+	Remove a group.
+	Remove-ADGroup astrophysicists
+	
+Get-ADGroupMember
+Gets the members of an Active Directory group.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/Get-ADGroupMember?view=win10-ps
+
+	Get the members of a group.
+	Get-ADGroupMember scientists
+	
+	Get the members of a group and all nested groups. (Add astrophysicists to scientists.)
+	Get-ADGroupMember scientists -Recursive
+	
+Add-ADGroupMember
+Adds one or more members to an Active Directory group.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/Add-ADGroupMember?view=win10-ps
+
+	Add a user to a group.
+	Add-ADGroupMember astrophysicists -Members aeinstein
+	
+Remove-ADGroupMember
+Removes one or more users from an Active Directory group.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/Remove-ADGroupMember?view=win10-ps
+
+	Remove a user from a group.
+	Remove-ADGroupMember astrophysicists -Members aeinstein
+	
+Get-ADPrincipalGroupMembership
+Gets the Active Directory groups that have a specified user, computer, group, or service account.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/Get-ADPrincipalGroupMembership?view=win10-ps
+
+	Get the groups that a user belongs to.
+	Get-ADPrincipalGroupMembership shawking
+
+Add-ADPrincipalGroupMembership
+Adds a member to one or more Active Directory groups.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/Add-ADPrincipalGroupMembership?view=win10-ps
+
+	Add a user to a one or more groups.
+	Add-ADPrincipalGroupMembership aeinstein nasa-astrophysicists,astrophysicists
+
+Remove-ADPrincipalGroupMembership
+Removes a member from one or more Active Directory groups.
+https://docs.microsoft.com/en-us/powershell/module/addsadministration/Remove-ADPrincipalGroupMembership?view=win10-ps
+
+	Remove a user from one or more groups
+	Remove-ADPrincipalGroupMembership aeinstein nasa-astrophysicists,astrophysicists
